@@ -1,2 +1,2 @@
 # JobTools
-Job Seeking in Chrome Extension
+A Useful Chrome Extension That Helps you with Job Searching.
