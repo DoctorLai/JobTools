@@ -1,5 +1,5 @@
 # JobTools
-**This is currently the first job search tool in Chrome Extension**
+**This is currently the first job search tool in Chrome Extension** It is based on [Zip Recruiter API](https://helloacm.com/php-job-searching-using-zip-recruiter-api/).
 
 A Useful Chrome Extension That Helps you with Job Searching.
 
@@ -15,7 +15,8 @@ https://chrome.google.com/webstore/detail/job-tools/ghclpimmbjepihhlnklkiemncamk
 - Integrated with Google Maps
 
 # Inspired by
-https://github.com/DoctorLai/ZipRecruiter/
+- [PHP Wrapper](https://github.com/DoctorLai/ZipRecruiter/)
+- [Software Engineering Jobs](https://helloacm.com/software-engineering-jobs/)
 
 # Author
 [@justyy](https://steemit.com/@justyy)
