@@ -1,6 +1,15 @@
 'use strict';
 
 let translation_traditional_chinese = {
+	'salary_max_annual': '最大年薪資',
+	'salary_min_annual': '最小年薪資',
+	'job_id': '職位 ID',
+	'company': '公司',
+	'job_date': '發佈時間',		
+	'job_keyword': '工作關鍵字',
+	'job_age': '發表於幾天前',
+	'job_location': '工作地方',
+	'job_radius': '搜索半徑（英理）',
 	'search': '搜索',
 	'source_code': '源代碼',
 	'report_bugs': '提交BUG',

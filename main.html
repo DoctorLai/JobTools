@@ -8,14 +8,18 @@
     <script src="lang/zh-cn.js"></script>         
     <script src="lang/zh-tw.js"></script>   
     <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/functions.js"></script>     
+    <script src="js/constants.js"></script>    
+    <script src="js/functions.js"></script>
+    <script src="js/jobsearch.js"></script>         
     <script src="js/jobtools.js"></script>
     <link href="bs/css/bootstrap.min.css" rel="stylesheet" />
     <script src="bs/js/bootstrap.min.js"></script>
+    <script src="js/sorttable.js"></script>
     <link rel="stylesheet" href="css/jquery-ui.css" />
     <script src="js/jquery-ui.js"></script>   
     <script src="js/translate.js"></script>    
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/custom.css" />
   </head>
   <body>
     <div id="tabs" class='ext-window'>
@@ -26,6 +30,8 @@
       </ul>
       <div id="tabs-search">
         <h4 id="text_search">Search</h4>
+        <button class="form-control" style='width: 70px' id="search_btn">Search</button> 
+        <div id='job_result'> </div>
       </div>   
       <div id="tabs-setting">
         <h4 id="text_ui_language">UI Language</h4>
@@ -34,6 +40,14 @@
           <option value="zh-cn">简体中文</option>
           <option value="zh-tw">繁體中文</option>
         </select>
+        <h4 id="job_keyword">Job Keyword</h4>
+        <input class="form-control" type='text' id='job_keyword' placeholder="e.g. Software Engineer">
+        <h4 id="job_location">Job Location</h4>
+        <input class="form-control" type='text' id='job_location' placeholder="e.g. London">
+        <h4 id="job_age">Job Age (Days)</h4>
+        <input class="form-control" type='number' id='job_age' placeholder="e.g. 7">
+        <h4 id="job_radius">Job Radius (Miles)</h4>
+        <input class="form-control" type='number' id='job_radius' placeholder="e.g. 10">        
         <button class="form-control" style='width: 70px' id="setting_save_btn">Save</button>     
       </div>   
       <div id="tabs-log">
