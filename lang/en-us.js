@@ -1,6 +1,12 @@
 'use strict';
 
 let translation_english = {
+	'total': 'Total',
+	'page': 'Page',
+	'next': 'Next Page',
+	'prev': 'Last Page',
+	'location': 'Location',
+	'job_name': 'Job Title',
 	'salary_max_annual': 'Max Annual Salary',
 	'salary_min_annual': 'Min Annual Salary',
 	'job_id': 'Job ID',

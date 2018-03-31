@@ -1,6 +1,12 @@
 'use strict';
 
 let translation_traditional_chinese = {
+	'total': '一共',
+	'page': '頁',
+	'next': '下一頁',
+	'prev': '前一頁',	
+	'location': '位置',
+	'job_name': '職位',
 	'salary_max_annual': '最大年薪資',
 	'salary_min_annual': '最小年薪資',
 	'job_id': '職位 ID',

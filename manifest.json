@@ -3,8 +3,7 @@
   "name": "Job Tools",
   "short_name": "JobTools",  
   "default_locale": "en",
-  "version": "0.0.1",
-  "offline_enabled": true,
+  "version": "0.0.2",
   "browser_action": {
      "default_icon": "icon.png",
      "default_title": "Job Tools",
@@ -18,7 +17,6 @@
     "128": "images/icon-128.png"
   },  
   "update_url":"http://clients2.google.com/service/update2/crx",
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "description": "Job Seeking in Chrome Extension",
   "web_accessible_resources": [
   		"js/*", 

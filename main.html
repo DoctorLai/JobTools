@@ -30,7 +30,20 @@
       </ul>
       <div id="tabs-search">
         <h4 id="text_search">Search</h4>
-        <button class="form-control" style='width: 70px' id="search_btn">Search</button> 
+        <form class='form-inline'>
+          <select class="form-control" id='per'>
+            <option value=10>10</option>
+            <option value=20>20</option>
+            <option value=30>30</option>
+            <option value=40>40</option>
+            <option value=50>50</option>
+            <option value=80>80</option> 
+            <option value=100>100</option>
+            <option value=200>200</option>
+            <option value=500>500</option>
+          </select>
+          <button type='button' class="form-control" style='width: 70px' id="search_btn">Search</button> 
+        </form>
         <div id='job_result'> </div>
       </div>   
       <div id="tabs-setting">

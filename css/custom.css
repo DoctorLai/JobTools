@@ -47,16 +47,6 @@ table th {
 table.sortable tbody {
     counter-reset: sortabletablescope;
 }
-table.sortable thead tr::before {
-    content: "";
-    display: table-cell;
-    width:5%;
-}
-table.sortable tbody tr::before {
-    content: counter(sortabletablescope);
-    counter-increment: sortabletablescope;
-    display: table-cell;
-}
 table.sortable tbody tr:nth-child(2n) td {
   background: white;
 }
