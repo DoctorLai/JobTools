@@ -1,6 +1,10 @@
 'use strict';
 
 let translation_english = {
+	'text_company': 'Company',
+	'clear_btn': 'Clear',
+	'min_salary': 'Min Salary',
+	'per': 'Number Per Page',
 	'total': 'Total',
 	'page': 'Page',
 	'next': 'Next Page',

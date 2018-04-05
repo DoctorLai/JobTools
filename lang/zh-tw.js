@@ -1,6 +1,10 @@
 'use strict';
 
 let translation_traditional_chinese = {
+	'text_company': '公司',
+	'clear_btn': '清空',		
+	'min_salary': '最低工資',
+	'per': '每頁顯示',		
 	'total': '一共',
 	'page': '頁',
 	'next': '下一頁',

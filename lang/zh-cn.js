@@ -1,6 +1,10 @@
 'use strict';
 
 let translation_simplified_chinese = {
+	'text_company': '公司',
+	'clear_btn': '清空',	
+	'min_salary': '最低工资',
+	'per': '每页显示',	
 	'total': '一共',
 	'page': '页',
 	'next': '下一页',
