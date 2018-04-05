@@ -1,5 +1,17 @@
 'use strict';
 
+// local job search companies
+let companies_s = localStorage.getItem("jobtools_companies");
+let companies = {};
+if (companies_s) {
+    try {
+        companies = JSON.parse(companies_s);
+    } catch (e) {
+        console.log(e);
+        companies = {};
+    }
+}
+
 // log in the textarea
 const logit = (msg) => {
     let d = new Date();
@@ -18,6 +30,7 @@ const saveSettings = (showMsg = true) => {
     settings['job_age'] = $('input#job_age').val();
     settings['job_radius'] = $('input#job_radius').val();
     settings['per'] = $('select#per').val();
+    settings['job_min_salary'] = $('input#min_salary').val();
     chrome.storage.sync.set({ 
         logosettings: settings
     }, function() {
@@ -28,17 +41,19 @@ const saveSettings = (showMsg = true) => {
 }
 
 // search jobs
-const searchJobs = (dom, page = 1, per = 100) => {
+const searchJobs = (dom, companies_dom, page = 1, per = 100) => {
     let job_location = $('input#job_location').val().trim();
     let job_radius = parseInt($('input#job_radius').val());
     let job_keyword = $('input#job_keyword').val().trim();
     let job_age = parseInt($('input#job_age').val());
+    let job_min_salary = parseInt($('input#min_salary').val());
     let jobs = new JobSearch(APP_KEY);
     jobs.SetLocation(job_location);
     jobs.SetKeyword(job_keyword);
     jobs.SetAge(job_age);
     jobs.SetRadius(job_radius);
     jobs.SetPage(page);
+    jobs.SetMinSalary(job_min_salary);
     per = per || 50;
     jobs.SetPer(per);
     let api = jobs.GetAPI();
@@ -59,7 +74,7 @@ const searchJobs = (dom, page = 1, per = 100) => {
                     pagination += "<button type='button' style='width:150px' class='form-control' id='prev'>" + get_text('prev') + "</button>";
                 }                   
                 if (page < total_pages) {
-                    pagination += "<button type='button' style='width:150px'  class='form-control' id='next'>" + get_text('next') + "</button>";
+                    pagination += "<button type='button' style='width:150px' class='form-control' id='next'>" + get_text('next') + "</button>";
                 }   
                 pagination += "</form>";
                 s += pagination;          
@@ -75,15 +90,22 @@ const searchJobs = (dom, page = 1, per = 100) => {
                 s += '</tr></thead><tbody>';        
                 let result = data.jobs;    
                 for (let i = 0; i < result.length; i ++) {
+                    let company_id = result[i]['hiring_company']['id'];
+                    let company_name = result[i]['hiring_company']['name'];
+                    let company_url = result[i]['hiring_company']['url'];
+                    let company_description = result[i]['hiring_company']['description'];
                     s += '<tr title="' + result[i]['snippet'] + '">';
                     s += '<td>' + ((page - 1) * per + i + 1) + "</td>";
                     s += '<td><a target=_blank href="' + result[i]['url'] + '">' + result[i]['name'] + '</a></td>';
-                    s += '<td><a target=_blank href="' + result[i]['url'] + '">' + result[i]['hiring_company']['name'] + '</a></td>';
+                    s += '<td><a target=_blank href="' + result[i]['url'] + '">' + company_name + '</a></td>';
                     s += '<td>' + result[i]['posted_time'] + '</td>';
                     s += '<td>' + result[i]['salary_min_annual'].toFixed(3) + '</td>';
                     s += '<td>' + result[i]['salary_max_annual'].toFixed(3) + '</td>';
                     s += '<td>' + result[i]['location'] + '</td>';
                     s += '</tr>';
+                    if (company_name) {
+                        companies[MD5(company_name)] = {"name": company_name, "url": company_url, "description": company_description};
+                    }
                 }
                 s += '</tbody>';
                 s += '</table><BR/>';      
@@ -91,15 +113,46 @@ const searchJobs = (dom, page = 1, per = 100) => {
                 dom.html(s);
                 if (page < total_pages) {
                     $('button#next').click(function() {
-                        searchJobs(dom, page + 1, per);
+                        searchJobs(dom, companies_dom, page + 1, per);
                     });                
                 }
                 if (page > 1) {
                     $('button#prev').click(function() {
-                        searchJobs(dom, page - 1, per);
+                        searchJobs(dom, companies_dom, page - 1, per);
                     }); 
                 }
                 sorttable.makeSortable(document.getElementById(div_id));
+                // hiring companies
+                s = '';
+                div_id = "companies_result";
+                s += '<table id="' + div_id + '" class="sortable">';
+                s += '<thead><tr>';
+                s += '<th>' + get_text('company', 'Company') + '</th>';                
+                s += '</tr></thead><tbody>';        
+                let keys = Object.keys(companies);
+                for (let i = 0; i < keys.length; i ++) {
+                    let key = keys[i];
+                    let url = companies[key]['url'];
+                    let desc = companies[key]['description'];
+                    s += '<tr>';                    
+                    if (url &&  url.startsWith("http")) {
+                        s += '<td><a target=_blank href="' + url + '">' + companies[key]['name'] + '</a></td>';    
+                    } else {
+                        s += '<td>' + companies[key]['name'] + '</td>';    
+                    }
+                    /*
+                    if (desc && desc != 'null') {
+                        s += '<td>' + desc + '</td>';
+                    } else {
+                        s += "<td></td>";
+                    }
+                    */
+                    s += '</tr>';
+                }
+                s += '</tbody>';
+                s += '</table>';
+                localStorage.setItem("jobtools_companies", JSON.stringify(companies));
+                companies_dom.html(s);
             } else {
                 dom.html('');
             }
@@ -137,6 +190,11 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 $('select#per').val("50");
             }
+            if (settings['job_min_salary']) {
+                $('input#min_salary').val(settings['job_min_salary']);
+            } else {
+                $('input#min_salary').val("0");
+            }
         } else {
             $("select#lang").val('en-us');
             $('input#job_keyword').val('Software Engineer');
@@ -144,6 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $('input#job_age').val('14');
             $('input#job_radius').val('20');
             $('select#per').val("50");
+            $('input#min_salary').val("0");
         }
         // about
         let manifest = chrome.runtime.getManifest();    
@@ -162,14 +221,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // search a job
     $('button#search_btn').click(function() {
         saveSettings(false);
-        searchJobs($('div#job_result'), 1, $('select#per').val());
+        searchJobs($('div#job_result'), $('div#companies'), 1, $('select#per').val());
     })
     $('select#per').change(function() {
         saveSettings(false);
-        searchJobs($('div#job_result'), 1, this.value);
+        searchJobs($('div#job_result'), $('div#companies'), 1, this.value);
     })    
     // automatic search job when app loads
     setTimeout(function() {
-        searchJobs($('div#job_result'), 1, $('select#per').val());
+        searchJobs($('div#job_result'), $('div#companies'), 1, $('select#per').val());
     }, 200);
+    // clear button of hiring companies
+    $('button#clear_btn').click(function() {
+        companies = {};
+        localStorage.setItem("jobtools_companies", JSON.stringify(companies));
+        $('div#companies').html('');
+    })
 }, false);

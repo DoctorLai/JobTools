@@ -11,6 +11,7 @@ class JobSearch {
 		this.age = 10;
 		this.per = 10;
 		this.page = 1;
+		this.min_salary = 0;
 	}
 
 	GetAPI() {
@@ -20,13 +21,18 @@ class JobSearch {
 		let age = this.age;
 		let page = this.page;
 		let per = this.per;
+		let salary = this.min_salary;
 		keyword = keyword.trim();
 		location = location.trim();
 		radius = parseInt(radius);
 		age = parseInt(age);
 		keyword = encodeURIComponent(keyword);
 		location = encodeURIComponent(location)		
-		return this.api + "?search=" + keyword + "&location=" + location + "&radius_miles=" + radius + "&days_ago=" + age + "&jobs_per_page=" + per + "&page=" + page + "&api_key=" + this.key;
+		salary = parseInt(salary);
+		if (!isNumeric(salary)) {
+			salary = 0;
+		}
+		return this.api + "?search=" + keyword + "&location=" + location + "&radius_miles=" + radius + "&days_ago=" + age + "&jobs_per_page=" + per + "&page=" + page + "&api_key=" + this.key + "&refine_by_salary=" + salary;
 	}
 
 	SetKeyword(keyword) {
@@ -51,5 +57,9 @@ class JobSearch {
 
 	SetPer(per) {
 		this.per = per;
+	}
+
+	SetMinSalary(salary) {
+		this.min_salary = salary;
 	}
 }

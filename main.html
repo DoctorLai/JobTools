@@ -9,6 +9,7 @@
     <script src="lang/zh-tw.js"></script>   
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/constants.js"></script>    
+    <script src="js/MD5.js"></script>    
     <script src="js/functions.js"></script>
     <script src="js/jobsearch.js"></script>         
     <script src="js/jobtools.js"></script>
@@ -24,14 +25,16 @@
   <body>
     <div id="tabs" class='ext-window'>
       <ul>
-        <li><a id="text_search" href="#tabs-search">Search</a></li>
+        <li><a id="text_search" href="#tabs-search">Search</a></li>        
+        <li><a id="text_company" href="#tabs-company">Companies</a></li>
         <li><a id="text_setting" href="#tabs-setting">Setting</a></li>
         <li><a id="text_log" href="#tabs-log">Log</a></li>        
       </ul>
       <div id="tabs-search">
         <h4 id="text_search">Search</h4>
         <form class='form-inline'>
-          <select class="form-control" id='per'>
+          <span id='min_salary'>Min Salary</span>: <input class="form-control" type='number' id='min_salary' placeholder="Min Salary" value=0>
+          <span id='per'>Per Page</span>: <select class="form-control" id='per'>
             <option value=10>10</option>
             <option value=20>20</option>
             <option value=30>30</option>
@@ -46,6 +49,11 @@
         </form>
         <div id='job_result'> </div>
       </div>   
+      <div id="tabs-company">
+        <h4 id="text_company">Companies</h4>
+        <div id='companies'> </div>
+        <button type='button' class="form-control" style='width: 70px' id="clear_btn">Clear</button> 
+      </div>        
       <div id="tabs-setting">
         <h4 id="text_ui_language">UI Language</h4>
         <select class="form-control" id="lang">
@@ -74,6 +82,7 @@
         <BR/>
         <a target=_blank href='https://www.paypal.me/doctorlai/3'><img src='images/paypal.png' style='height: 70px'></a> &nbsp;
         <a target=_blank href='https://justyy.com/out/bitcoin'><img src='images/bitcoin.jpg' style='height: 70px'></a>
+        <a target=_blank href='https://github.com/DoctorLai/JobTools"'><img src='images/logo/jobtools.png' style='height: 70px'></a>
       </div>      
     </div>
   </body>
