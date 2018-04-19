@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_traditional_chinese = {
+	'saved': '保存的工作',
 	'text_company': '公司',
 	'clear_btn': '清空',		
 	'min_salary': '最低工資',

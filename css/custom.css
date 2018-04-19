@@ -56,3 +56,8 @@ table.sortable tbody tr:nth-child(2n+1) td {
 table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
     content: " \25B4\25BE" 
 }
+.button-img, .button-img2 {
+  border: 0;
+  height: 30px;
+  cursor: pointer;
+}

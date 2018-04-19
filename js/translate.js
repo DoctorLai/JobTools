@@ -19,10 +19,13 @@ const translation = (lang) => {
     translate_text($('a#text_company'), lang, 'text_company');
     translate_text($('h4#text_company'), lang, 'text_company');
     translate_text($('button#clear_btn'), lang, 'clear_btn');
+    translate_text($('button#clear_job_btn'), lang, 'clear_btn');
     translate_text($('h4#text_ui_language'), lang, 'ui_language');
     translate_text($('h4#text_logs'), lang, 'text_logs');
     translate_text($('h4#text_search'), lang, 'search');
     translate_text($('a#text_search'), lang, 'search');
+    translate_text($('a#text_saved'), lang, 'saved');
+    translate_text($('h4#text_saved'), lang, 'saved');
     translate_text($('span#source_code'), lang, 'source_code');
     translate_text($('span#min_salary'), lang, 'min_salary');
     translate_text($('span#per'), lang, 'per');

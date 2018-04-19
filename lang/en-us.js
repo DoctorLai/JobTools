@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_english = {
+	'saved': 'Saved Jobs',
 	'text_company': 'Company',
 	'clear_btn': 'Clear',
 	'min_salary': 'Min Salary',

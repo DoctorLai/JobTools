@@ -12,14 +12,8 @@ if (companies_s) {
     }
 }
 
-// log in the textarea
-const logit = (msg) => {
-    let d = new Date();
-    let n = d.toLocaleTimeString();
-    let dom = $('textarea#about');
-    let s = dom.val();
-    dom.val(s + "\n" + n + ": " + msg);
-}
+// global saved jobs
+let saved_jobs = {};
 
 // save settings
 const saveSettings = (showMsg = true) => {
@@ -30,14 +24,92 @@ const saveSettings = (showMsg = true) => {
     settings['job_age'] = $('input#job_age').val();
     settings['job_radius'] = $('input#job_radius').val();
     settings['per'] = $('select#per').val();
-    settings['job_min_salary'] = $('input#min_salary').val();
+    settings['job_min_salary'] = $('input#min_salary').val();    
+    settings['saved_jobs'] = JSON.stringify(saved_jobs);
     chrome.storage.sync.set({ 
-        logosettings: settings
+        jobtools_settings: settings
     }, function() {
         if (showMsg) {
             alert(get_text('alert_save'));
         }
     });
+}
+
+// save a job
+const save_a_job = (id, title, company, date, min_salary, max_salary, location, url) => {
+    saved_jobs[id] = {
+        "title": title,
+        "company": company,
+        "date": date,
+        "min_salary": min_salary,
+        "max_salary": max_salary,
+        "location": location,
+        "url": url
+    };
+    saveSettings(false);
+}
+
+// remove a job
+const remove_a_job = (id) => {
+    delete saved_jobs[id];
+    saveSettings(false);
+}
+
+// reload the job list
+const load_job_list = (saved_jobs, dom) => {
+    let s = '';
+    let div_id = "saved_job_list_id";
+    s += '<table id="' + div_id + '" class="sortable">';
+    s += '<thead><tr>';
+    s += '<th> </th>';
+    s += '<th>' + get_text('job_name', 'Job Title') + '</th>';
+    s += '<th>' + get_text('company', 'Company') + '</th>';                
+    s += '<th>' + get_text('job_date', 'Job Date') + '</th>';
+    s += '<th>' + get_text('salary_min_annual', 'Min Annual Salary') + '</th>';
+    s += '<th>' + get_text('salary_max_annual', 'Max Annual Salary') + '</th>';
+    s += '<th>' + get_text('location', 'Location') + '</th>';
+    s += '</tr></thead><tbody>';        
+    let job_ids = Object.keys(saved_jobs);
+    let job_len = job_ids.length;
+    for (let i = 0; i < job_len; i ++) {
+        let id = job_ids[i];        
+        let job = saved_jobs[id];
+        if (job != null) {
+            let url = job['url'];
+            let title = job['title'];
+            let company = job['company'];
+            let date = job['date'];
+            let min_salary = job['min_salary'];
+            let max_salary = job['max_salary'];
+            let location = job['location'];
+            s += '<tr>';
+            s += '<td>' + "<img id='" + id + "' class='button-img2' src='images/remove.png'> " + (i + 1) + "</td>";
+            s += '<td><a target=_blank href="' + url + '">' + title + '</a></td>';
+            s += '<td><a target=_blank href="' + url + '">' + company + '</a></td>';
+            s += '<td>' + date + '</td>';
+            s += '<td>' + min_salary + '</td>';
+            s += '<td>' + max_salary + '</td>';
+            s += '<td>' + location + '</td>';
+            s += '</tr>';
+        }
+    }
+    s += '</tbody>';
+    s += '</table>';      
+    dom.html(s);
+    $("img.button-img2").click(function() {
+        let id = this.id;
+        remove_a_job(id);
+        load_job_list(saved_jobs, $("div#saved_jobs"));
+    })
+}
+
+// log in the textarea
+const logit = (msg) => {
+    let d = new Date();
+    let n = d.toLocaleTimeString();
+    let dom = $('textarea#about');
+    let s = dom.val();
+    dom.val(s + "\n" + n + ": " + msg);
 }
 
 // search jobs
@@ -89,28 +161,55 @@ const searchJobs = (dom, companies_dom, page = 1, per = 100) => {
                 s += '<th>' + get_text('location', 'Location') + '</th>';
                 s += '</tr></thead><tbody>';        
                 let result = data.jobs;    
+                let job_hash = {}
                 for (let i = 0; i < result.length; i ++) {
+                    let id = result[i]['id'];
                     let company_id = result[i]['hiring_company']['id'];
                     let company_name = result[i]['hiring_company']['name'];
                     let company_url = result[i]['hiring_company']['url'];
                     let company_description = result[i]['hiring_company']['description'];
+                    let _min_salary = result[i]['salary_min_annual'];
+                    let _max_salary = result[i]['salary_max_annual'];
+                    if (_min_salary == null) {
+                        _min_salary = 0;
+                    }
+                    if (_max_salary == null) {
+                        _max_salary = 0;
+                    }
                     s += '<tr title="' + result[i]['snippet'] + '">';
-                    s += '<td>' + ((page - 1) * per + i + 1) + "</td>";
+                    s += '<td>' + "<img id='" + id + "' class='button-img' src='images/saved.png'> " + ((page - 1) * per + i + 1) + "</td>";
                     s += '<td><a target=_blank href="' + result[i]['url'] + '">' + result[i]['name'] + '</a></td>';
                     s += '<td><a target=_blank href="' + result[i]['url'] + '">' + company_name + '</a></td>';
                     s += '<td>' + result[i]['posted_time'] + '</td>';
-                    s += '<td>' + result[i]['salary_min_annual'].toFixed(3) + '</td>';
-                    s += '<td>' + result[i]['salary_max_annual'].toFixed(3) + '</td>';
+                    s += '<td>' + _min_salary.toFixed(3) + '</td>';
+                    s += '<td>' + _max_salary.toFixed(3) + '</td>';
                     s += '<td>' + result[i]['location'] + '</td>';
                     s += '</tr>';
                     if (company_name) {
                         companies[MD5(company_name)] = {"name": company_name, "url": company_url, "description": company_description};
+                    }
+                    job_hash[id] = {
+                        "title": result[i]['name'],
+                        "company": company_name,
+                        "date": result[i]['posted_time'],
+                        "min_salary": _min_salary.toFixed(3),
+                        "max_salary": _max_salary.toFixed(3),
+                        "location": result[i]['location'],
+                        "url": result[i]['url']                        
                     }
                 }
                 s += '</tbody>';
                 s += '</table><BR/>';      
                 s += pagination;
                 dom.html(s);
+                $("img.button-img").click(function() {
+                    // save it locally
+                    save_a_job(this.id, job_hash[this.id].title, job_hash[this.id].company, job_hash[this.id].date, job_hash[this.id].min_salary, job_hash[this.id].max_salary, job_hash[this.id].location, job_hash[this.id].url);
+                    // hide the button
+                    $(this).hide();
+                    // refresh the saved job list
+                    load_job_list(saved_jobs, $("div#saved_jobs"));
+                })
                 if (page < total_pages) {
                     $('button#next').click(function() {
                         searchJobs(dom, companies_dom, page + 1, per);
@@ -176,9 +275,9 @@ document.addEventListener('DOMContentLoaded', function() {
         $( "#tabs" ).tabs();
     });      
     // load settings
-    chrome.storage.sync.get('logosettings', function(data) {
-        if (data && data.logosettings) {
-            let settings = data.logosettings;
+    chrome.storage.sync.get('jobtools_settings', function(data) {
+        if (data && data.jobtools_settings) {
+            let settings = data.jobtools_settings;
             let lang = settings['lang'];
             $("select#lang").val(lang);
             $('input#job_keyword').val(settings['job_keyword']);
@@ -194,6 +293,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 $('input#min_salary').val(settings['job_min_salary']);
             } else {
                 $('input#min_salary').val("0");
+            }
+            if (settings['saved_jobs']) {
+                let saved_jobs_s = settings['saved_jobs'];
+                // saved jobs 
+                if (saved_jobs_s) {
+                    try {
+                        saved_jobs = JSON.parse(saved_jobs_s);
+                    } catch (e) {
+                        console.log(e);
+                        saved_jobs = {};
+                    }
+                }
+                load_job_list(saved_jobs, $("div#saved_jobs"));
             }
         } else {
             $("select#lang").val('en-us');
@@ -236,5 +348,11 @@ document.addEventListener('DOMContentLoaded', function() {
         companies = {};
         localStorage.setItem("jobtools_companies", JSON.stringify(companies));
         $('div#companies').html('');
+    })
+    // clear button of saved jobs
+    $('button#clear_job_btn').click(function() {
+        saved_jobs = {};
+        saveSettings(false);
+        $('div#saved_jobs').html('');
     })
 }, false);
