@@ -21,7 +21,7 @@ let translation_english = {
 	'job_age': 'Posted Age (Days)',
 	'job_location': 'Location of Jobs',
 	'job_radius': 'Radius in Miles',
-	'search': 'Search',
+	'search': 'Search (USA and UK)',
 	'source_code': 'Source Code',
 	'report_bugs': 'Report Bugs',
 	'text_logs': 'Versions History',

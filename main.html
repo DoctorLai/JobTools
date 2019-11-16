@@ -2,12 +2,12 @@
 <html>
   <head>
     <meta charset="UTF-8"/>
-    <title>Job Tools</title>
+    <title>Job Tools (USA, UK)</title>
     <meta name="author" content="@justyy">
     <script src="lang/en-us.js"></script>     
     <script src="lang/zh-cn.js"></script>         
     <script src="lang/zh-tw.js"></script>   
-    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery.js"></script>
     <script src="js/constants.js"></script>    
     <script src="js/MD5.js"></script>    
     <script src="js/functions.js"></script>
@@ -46,7 +46,7 @@
             <option value=200>200</option>
             <option value=500>500</option>
           </select>
-          <button type='button' class="form-control" style='width: 70px' id="search_btn">Search</button> 
+          <button type='button' class="form-control" id="search_btn">Search</button> 
         </form>
         <div id='job_result'> </div>
       </div>
@@ -83,13 +83,24 @@
         <h5>
         <a target=_blank href="https://github.com/DoctorLai/JobTools"><B><span id='source_code'>Source Code</span></B>: https://github.com/DoctorLai/JobTools</a>
         </h5>          
+        API Key for (USA): 7nab6vabqkzpfwmv6qs4h27z6inj6mrh<BR/>
+        API Key for (UK ): xmupr3vkrquvgb933zsi3niqft9khuh4
         <textarea readonly class='form-control' rows=15 id='about'>           
         </textarea>     
         <BR/>
         <a target=_blank href='https://www.paypal.me/doctorlai/3'><img src='images/paypal.png' style='height: 70px'></a> &nbsp;
-        <a target=_blank href='https://justyy.com/out/bitcoin'><img src='images/bitcoin.jpg' style='height: 70px'></a>
-        <a target=_blank href='https://github.com/DoctorLai/JobTools"'><img src='images/logo/jobtools.png' style='height: 70px'></a>
-      </div>      
+        <a target=_blank href='https://justyy.com/out/vultr2'><img title='Free $10 VPS' src='images/vultr.jpg' class='banner'></a>
+        &nbsp;
+        <a target=_blank href='https://justyy.com/out/linode'><img title='Free $20 VPS' src='images/linode.jpg' class='banner'></a>            
+        &nbsp;
+        <a target=_blank href='https://justyy.com/out/do'><img title='Free $10 VPS' src='images/digitalocean.jpg' class='banner'></a>                
+      </div>        
+      <div id='vpsdiv' style='text-align:center'>
+          <I><span id='vpspromotion' style='color:gray'>VPS Promotions</span></I>
+          <B>
+          <a target=_blank href='https://justyy.com/out/vultr2'>Vultr ($10)</a> | <a target=_blank href='https://justyy.com/out/linode'>Linode ($20)</a> | <a target=_blank href='https://justyy.com/out/do'>Digital Ocean ($10)</a>                
+          </B>
+      </div>          
     </div>
   </body>
 </html>

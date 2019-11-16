@@ -21,7 +21,7 @@ let translation_simplified_chinese = {
 	'job_age': '发表于几天前',
 	'job_location': '工作地方',
 	'job_radius': '搜索半径（英理）',	
-	'search': '搜索',
+	'search': '搜索 (英国和美国)',
 	'source_code': '源代码',
 	'report_bugs': '提交BUG',
 	'text_logs': '版本记录',

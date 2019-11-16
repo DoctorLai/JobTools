@@ -3,7 +3,7 @@
   "name": "Job Tools",
   "short_name": "JobTools",  
   "default_locale": "en",
-  "version": "0.0.4.0",
+  "version": "0.0.5.1",
   "browser_action": {
      "default_icon": "icon.png",
      "default_title": "Job Tools",
@@ -16,8 +16,7 @@
     "48": "images/icon-48.png",
     "128": "images/icon-128.png"
   },  
-  "update_url":"http://clients2.google.com/service/update2/crx",
-  "description": "Job Seeking in Chrome Extension",
+  "description": "Job Seeking (USA and UK) in Chrome Extension",
   "web_accessible_resources": [
   		"js/*", 
       "lang/*",
@@ -31,13 +30,12 @@
   "content_scripts": [{
       "matches": ["<all_urls>"],
       "js":[
-          "js/jquery-3.2.1.min.js",
+          "js/jquery.js",
           "js/content.js"
       ],
       "run_at":"document_start"
   }],
   "permissions": [
-     "activeTab",
      "storage",
      "tabs",
      "<all_urls>"

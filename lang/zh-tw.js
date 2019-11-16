@@ -21,7 +21,7 @@ let translation_traditional_chinese = {
 	'job_age': '發表於幾天前',
 	'job_location': '工作地方',
 	'job_radius': '搜索半徑（英理）',
-	'search': '搜索',
+	'search': '搜索 (英國和美國)',
 	'source_code': '源代碼',
 	'report_bugs': '提交BUG',
 	'text_logs': '版本記錄',
