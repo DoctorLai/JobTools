@@ -3,7 +3,7 @@
   "name": "Job Tools",
   "short_name": "JobTools",  
   "default_locale": "en",
-  "version": "0.0.5.0",
+  "version": "0.0.5.1",
   "browser_action": {
      "default_icon": "icon.png",
      "default_title": "Job Tools",
@@ -36,7 +36,6 @@
       "run_at":"document_start"
   }],
   "permissions": [
-     "activeTab",
      "storage",
      "tabs",
      "<all_urls>"
