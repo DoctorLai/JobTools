@@ -113,13 +113,13 @@ const logit = (msg) => {
 }
 
 // search jobs
-const searchJobs = (dom, companies_dom, page = 1, per = 100) => {
+const searchJobs = async(dom, companies_dom, page = 1, per = 100) => {
     let job_location = $('input#job_location').val().trim();
     let job_radius = parseInt($('input#job_radius').val());
     let job_keyword = $('input#job_keyword').val().trim();
     let job_age = parseInt($('input#job_age').val());
     let job_min_salary = parseInt($('input#min_salary').val());
-    let jobs = new JobSearch(APP_KEY);
+    let jobs = new JobSearch();
     jobs.SetLocation(job_location);
     jobs.SetKeyword(job_keyword);
     jobs.SetAge(job_age);
@@ -128,7 +128,7 @@ const searchJobs = (dom, companies_dom, page = 1, per = 100) => {
     jobs.SetMinSalary(job_min_salary);
     per = per || 50;
     jobs.SetPer(per);
-    let api = jobs.GetAPI();
+    let api = await jobs.GetAPI();
     logit(get_text("calling", "calling") + " " + api);
     dom.html('<img src="images/loading.gif" />');
     $.ajax({
@@ -310,9 +310,9 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             $("select#lang").val('en-us');
             $('input#job_keyword').val('Software Engineer');
-            $('input#job_location').val('London');
-            $('input#job_age').val('14');
-            $('input#job_radius').val('20');
+            $('input#job_location').val('New York, USA');
+            $('input#job_age').val('30');
+            $('input#job_radius').val('200');
             $('select#per').val("50");
             $('input#min_salary').val("0");
         }
