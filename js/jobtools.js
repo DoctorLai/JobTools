@@ -128,9 +128,9 @@ const searchJobs = async(dom, companies_dom, page = 1, per = 100) => {
     jobs.SetMinSalary(job_min_salary);
     per = per || 50;
     jobs.SetPer(per);
+    dom.html('<img src="images/loading.gif" />');    
     let api = await jobs.GetAPI();
     logit(get_text("calling", "calling") + " " + api);
-    dom.html('<img src="images/loading.gif" />');
     $.ajax({
         type: "GET",
         url: api,
