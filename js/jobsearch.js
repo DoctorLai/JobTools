@@ -2,18 +2,14 @@
 
 class JobSearch {
 	constructor() {
-		this.api = "https://api.ziprecruiter.com/jobs/v1";
+		this.cloudflare = "https://str.justyy.workers.dev/ziprecruiter";
 		this.keyword = "Software Engineer";
-		this.location = "California, USA";
-		this.radius = 100;
+		this.location = "Seattle, USA";
+		this.radius = 200;
 		this.age = 30;
 		this.per = 15;
 		this.page = 1;
 		this.min_salary = 0;
-	}
-
-	TestKey(api_keys) {
-
 	}
 
 	async GetAPI() {
@@ -24,7 +20,8 @@ class JobSearch {
 		let page = this.page;
 		let per = this.per;
 		let salary = this.min_salary;
-		const api = this.api;
+		const cloudflare = this.cloudflare;
+
 		keyword = keyword.trim();
 		location = location.trim();
 		radius = parseInt(radius);
@@ -35,26 +32,63 @@ class JobSearch {
 		if (!isNumeric(salary)) {
 			salary = 0;
 		}
-		function getURL(key) {
-			return api + "?search=" + keyword + "&location=" + location + "&radius_miles=" + radius + "&days_ago=" + age + "&jobs_per_page=" + per + "&page=" + page + "&api_key=" + key + "&refine_by_salary=" + salary;
+		
+		function getURL(api, key) {
+			return (api ? api : "https://api.ziprecruiter.com/jobs/v1") + 
+								"?search=" + keyword + 
+								"&location=" + location + 
+								"&radius_miles=" + radius + 
+								"&days_ago=" + age + 
+								"&jobs_per_page=" + per + 
+								"&page=" + page + 
+								"&api_key=" + key + 
+								"&refine_by_salary=" + salary;
 		}
-		const api_keys = ['7nab6vabqkzpfwmv6qs4h27z6inj6mrh', 'xmupr3vkrquvgb933zsi3niqft9khuh4'];		
-		let key = api_keys[0];
-		const response = await fetch(getURL(key));
-		const data = await response.json();
-		if ((!data) || (!data.total_jobs) || (data.total_jobs === 0)) { // first key is invalid then pick second
-			console.log("Try other API Key which is " + api_keys[1]);
-			key = api_keys[1];
-		} else { // first key ok, try second key
-			const response2 = await fetch(getURL(api_keys[1]));
-			const data2 = await response2.json();
-			if (data2 && (data2.total_jobs) && (data2.total_jobs > data.total_jobs)) { // second is better than first one
-				console.log("Try other API Key which seems better " + api_keys[1]);
-				key = api_keys[1];
-			} 
 
+		const worker = await fetch(this.cloudflare);
+		const worker_data = await worker.json();
+
+		let key_to_api = {
+			"e3ataxfnpynn4zhrtjinwkxi2s4sweg7": "https://api.ziprecruiter.com/jobs/v1",
+			"p7ark7v2nzpzat6r38zhwuftm5p22x2m": "https://api.ziprecruiter.com/jobs/v1"
+		};
+		let api_keys = Object.keys(key_to_api);
+
+		if ((!worker_data) || (!worker_data.result)) {
+			console.log("ERROR: " + this.cloudflare + " is down.");
+		} else {
+			let countries = Object.keys(worker_data);
+			for (let i = 0; i < countries.length; i ++) {
+				if (countries[i] === "result") continue;
+				const current_key = worker_data[countries[i]]["key"];
+				if (api_keys.includes(current_key)) continue;
+				const current_api = worker_data[countries[i]]["api"];				
+				console.log("country = " + countries[i]);
+				console.log("current_key = " + current_key);
+				console.log("current_api = " + current_api);
+				api_keys.push(current_key);
+				key_to_api[current_key] = current_api;
+			}
 		}
-		return getURL(key);
+
+		let key = api_keys[0];
+		let count = 0;
+
+		for (let i = 0; i < api_keys.length; ++ i) {
+			const current_key = api_keys[i];
+			const current_api = key_to_api[current_key];
+			try {
+				const response = await fetch(getURL(current_api, current_key));
+				const data = await response.json();
+				if (data && (data.total_jobs) && (data.total_jobs > count)) { 
+					count = data.total_jobs;
+					key = current_key;
+				}
+			} catch (ex) {
+				console.log(JSON.stringify(ex));
+			}
+		}
+		return getURL(key_to_api[key], key);
 	}
 
 	Run() {

@@ -1,12 +1,12 @@
 {
   "manifest_version": 2,
-  "name": "Job Tools",
-  "short_name": "JobTools",  
+  "name": "Find a Job",
+  "short_name": "JobSearch",  
   "default_locale": "en",
-  "version": "0.0.5.2",
+  "version": "0.0.6.0",
   "browser_action": {
      "default_icon": "icon.png",
-     "default_title": "Job Tools",
+     "default_title": "Find a Job (Job Search)",
      "default_popup": "main.html"
   },
   "author": "justyy<dr.zhihua.lai@gmail.com>",
@@ -16,7 +16,7 @@
     "48": "images/icon-48.png",
     "128": "images/icon-128.png"
   },  
-  "description": "Job Seeking (USA and UK) in Chrome Extension",
+  "description": "Find a Job - Job Search - Job Finder",
   "web_accessible_resources": [
   		"js/*", 
       "lang/*",
