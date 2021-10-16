@@ -3,6 +3,7 @@
 class JobSearch {
 	constructor() {
 		this.cloudflare = "https://str.justyy.workers.dev/ziprecruiter";
+		this.zipAPI = "https://api.ziprecruiter.com/jobs/v1";
 		this.keyword = "Software Engineer";
 		this.location = "Seattle, USA";
 		this.radius = 200;
@@ -34,7 +35,7 @@ class JobSearch {
 		}
 		
 		function getURL(api, key) {
-			return (api ? api : "https://api.ziprecruiter.com/jobs/v1") + 
+			return (api ? api : this.zipAPI) + 
 								"?search=" + keyword + 
 								"&location=" + location + 
 								"&radius_miles=" + radius + 
@@ -49,8 +50,8 @@ class JobSearch {
 		const worker_data = await worker.json();
 
 		let key_to_api = {
-			"e3ataxfnpynn4zhrtjinwkxi2s4sweg7": "https://api.ziprecruiter.com/jobs/v1",
-			"p7ark7v2nzpzat6r38zhwuftm5p22x2m": "https://api.ziprecruiter.com/jobs/v1"
+			"e3ataxfnpynn4zhrtjinwkxi2s4sweg7": this.zipAPI,
+			"p7ark7v2nzpzat6r38zhwuftm5p22x2m": this.zipAPI
 		};
 		let api_keys = Object.keys(key_to_api);
 
